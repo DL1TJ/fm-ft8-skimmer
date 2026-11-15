@@ -72,7 +72,7 @@ function renderStation() {
     tile("Channel", last ? (last.carrier_s >= 0.5 ? db(last.peak_db) : "clear") : "—", last ? (last.carrier_s >= 0.5 ? `${last.what || "signal"}, ${Math.round(last.carrier_s)} s` : "nothing in the last slot") : ""),
     tile("Messages, 24 h", String(sum("msgs")), `${sum("qsos")} QSO${sum("qsos") === 1 ? "" : "s"}`),
   );
-  $("st-age").textContent = [s.sdr, s.antenna].filter(Boolean).join(" · ");
+  $("st-age").textContent = $("st-age").title = [s.sdr, s.antenna].filter(Boolean).join(" · ");
   // who and where: from the skimmer's settings
   const mhz = (s.freq / 1e6).toFixed(3), call = s.call || "";
   $("title").textContent = (call ? call + " // " : "") + "FM-FT8 SKIMMER";
