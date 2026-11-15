@@ -1,0 +1,28 @@
+# User service: runs the skimmer as you, without root.
+#
+#   mkdir -p ~/.config/systemd/user
+#   cp systemd/fm-ft8-skimmer.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now fm-ft8-skimmer
+#   loginctl enable-linger "$USER"        # keep it running when you are logged out
+#   journalctl --user -u fm-ft8-skimmer -f  # its log
+#
+# Adjust the path below if the repository is not in ~/fm-ft8-skimmer.
+
+[Unit]
+Description=fm-ft8-skimmer: receive-only skimmer for FM-FT8
+After=network-online.target time-sync.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -u %h/fm-ft8-skimmer/skimmer.py
+Restart=always
+RestartSec=20
+Nice=5
+NoNewPrivileges=yes
+KillSignal=SIGTERM
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,22 @@
+name: self-test
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  selftest:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]      # x86-64, and ARM64 as on a Raspberry Pi
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install numpy and WSJT-X (for jt9)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends python3-numpy wsjtx
+      - name: Self-test
+        run: python3 selftest.py
+      - name: Decode a test slot and time it
+        run: python3 skimmer.py --check || test $? -eq 1   # rtl_sdr is not installed here; the rest must print

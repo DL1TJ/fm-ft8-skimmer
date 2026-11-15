@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FM-FT8 Skimmer</title>
+<meta name="description" content="A receiver that listens for FM-FT8, standard FT8 sent through ordinary FM radios: every decoded message, the latest QSOs and the activity of the last day, week and month.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="style.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <div>
+        <h1 id="title">FM-FT8 SKIMMER</h1>
+        <div class="sub" id="subtitle">Listening for FT8 via FM</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <span class="pill" id="pill-conn"><span class="dot"></span><span>connecting</span></span>
+    <span class="pill" id="pill-rx"><span class="dot"></span><span>skimmer</span></span>
+    <button class="theme-btn" id="theme-btn" type="button">theme</button>
+  </header>
+
+  <main class="grid">
+    <section class="card span-7" aria-labelledby="h-about">
+      <h2 id="h-about"><span>FT8 through an FM handheld</span></h2>
+      <div class="body">
+        <p class="lead">FM-FT8 is standard FT8 sent through ordinary FM radios, with <b><span class="qrg">144.575</span> MHz, FM, simplex</b> as the calling frequency. This receiver listens there and shows every FT8 message it decodes, so you can check whether your signal gets out.</p>
+        <a class="cta" href="https://github.com/DL1TJ/fm-ft8" rel="noopener">About FM-FT8 and how to set up your station →</a>
+        <p class="note">Receive only. FM range is local: expect to be heard only from the area around the receiver. All times are UTC. The SNR is measured in the demodulated audio, so it is not comparable with SSB reports; "RF" is the strength of the FM carrier over the noise floor.</p>
+        <p class="note" id="psk-note" hidden>Every station heard here is also reported to PSK Reporter: <a id="psk-link" href="https://pskreporter.info/" target="_blank" rel="noopener">reports of the last 24 h on pskreporter.info ↗</a></p>
+      </div>
+    </section>
+
+    <div class="side span-5">
+      <section class="card" aria-labelledby="h-station">
+        <h2 id="h-station"><span>Skimmer</span><span class="right faint" id="st-age"></span></h2>
+        <div class="body"><div class="health" id="health"><div class="empty">waiting for the skimmer…</div></div></div>
+      </section>
+      <section class="card grow" aria-labelledby="h-use">
+        <h2 id="h-use"><span>Frequency usage</span></h2>
+        <div class="body">
+          <div id="usage"><div class="empty">waiting for the skimmer…</div></div>
+          <div class="legend"><span><i class="l-ft8"></i>FT8 via FM</span><span><i class="l-other"></i>anything else</span><span>rest of the bar: frequency clear · shares of the time listened</span></div>
+          <p class="note" id="use-last"></p>
+        </div>
+      </section>
+    </div>
+
+    <section class="card span-12" aria-labelledby="h-tl">
+      <h2 id="h-tl"><span>Activity</span>
+        <span class="right"><span class="seg" role="group" aria-label="Time range">
+          <button type="button" data-range="24h" aria-pressed="true">24 h</button><button type="button" data-range="week" aria-pressed="false">week</button><button type="button" data-range="month" aria-pressed="false">month</button>
+        </span></span></h2>
+      <div class="body">
+        <div class="tl-wrap" id="tl-wrap">
+          <svg id="tl" role="img" aria-label="Decoded FT8 messages and QSOs over time"></svg>
+          <div class="tip" id="tip" hidden></div>
+        </div>
+        <div class="legend"><span><i class="l-cov"></i>share of the time the skimmer was listening</span><span><i class="l-off"></i>not listening (receiver busy or off): no data, not silence</span><span id="tl-sum"></span></div>
+      </div>
+    </section>
+
+    <section class="card span-12" aria-labelledby="h-qso">
+      <h2 id="h-qso"><span>Latest QSOs</span><span class="right faint" id="qso-count"></span></h2>
+      <div class="body scroll-x tall"><table class="tbl" id="qsos"><thead><tr><th>Last heard (UTC)</th><th>Stations</th><th>Progress</th><th>Locators</th><th>Reports sent</th><th class="num">Messages</th><th class="num">Best SNR</th></tr></thead><tbody><tr><td colspan="7" class="muted">waiting for the skimmer…</td></tr></tbody></table></div>
+    </section>
+
+    <section class="card span-7" aria-labelledby="h-msg">
+      <h2 id="h-msg"><span>Decoded messages</span><span class="right faint" id="msg-count"></span></h2>
+      <div class="body scroll-x tall"><table class="tbl" id="msgs"><thead><tr><th>Time (UTC)</th><th>Message</th><th class="num">SNR</th><th class="num">DT</th><th class="num">Tone</th><th class="num">RF</th></tr></thead><tbody><tr><td colspan="6" class="muted">waiting for the skimmer…</td></tr></tbody></table></div>
+    </section>
+
+    <section class="card span-5" aria-labelledby="h-car">
+      <h2 id="h-car"><span>Also heard on the frequency</span></h2>
+      <div class="body">
+        <div class="scroll-x tall"><table class="tbl plain" id="cars"><thead><tr><th>Time (UTC)</th><th class="num">On air</th><th class="num">RF</th><th>What it was</th></tr></thead><tbody><tr><td colspan="4" class="muted">waiting for the skimmer…</td></tr></tbody></table></div>
+        <p class="note">Signals on the frequency that were not FT8 via FM, identified automatically as well as their shape allows: voice, carriers, tones, packet data, SSB and CW. They are only noted here and are not part of the FT8 counts. "FT8-like tones, not decoded" usually means a clock that is off, a transmission cut short, or audio that is too loud or too quiet.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span id="foot">fm-ft8-skimmer · receive only · RTL-SDR, FM demodulator and the FT8 decoder of WSJT-X</span>
+    <span id="links"></span>
+    <a href="https://github.com/DL1TJ/fm-ft8-skimmer" rel="noopener">source</a>
+  </footer>
+</div>
+<script src="mqtt-lite.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
