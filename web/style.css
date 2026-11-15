@@ -92,7 +92,9 @@ header.top {
 .card > h2 > span:first-child::before { content: "─[ "; color: var(--border-hi); }
 .card > h2 > span:first-child::after { content: " ]─"; color: var(--border-hi); }
 .card > h2 > span:first-child, .card > h2 .right { background: var(--bg); padding: 0 4px; }
-.card > h2 .right { margin-left: auto; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); text-shadow: none; }
+.card > h2 > span:first-child { flex: none; }
+.card > h2 .right { margin-left: auto; text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); text-shadow: none;
+  min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }   /* long text is cut, never wrapped over the card */
 .card .body { padding: 18px 14px 14px; min-width: 0; }
 .span-12 { grid-column: span 12; } .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; }
 @media (max-width: 980px) { .span-7, .span-5 { grid-column: span 12; } }
